@@ -1,20 +1,23 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {Button, TamaguiProvider} from 'tamagui';
+import config from '../../../tamagui.config';
 
-export const MyButton = ({ onPress, text }) => {
+console.log('MyButton');
+
+export const MyButton = () => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
-      <Text style={styles.text}>{text}</Text>
-    </TouchableOpacity>
+    <TamaguiProvider config={config}>
+      <Button />
+    </TamaguiProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: 'purple',
-    borderRadius: 8,
-  },
-  text: { color: 'white' },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     paddingHorizontal: 16,
+//     paddingVertical: 8,
+//     backgroundColor: 'purple',
+//     borderRadius: 8,
+//   },
+//   text: {color: 'white'},
+// });

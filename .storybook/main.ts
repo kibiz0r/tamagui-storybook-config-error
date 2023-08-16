@@ -1,6 +1,7 @@
 // @ts-ignore
-import path, { resolve } from 'path'
-import { StorybookConfig } from '@storybook/nextjs'
+import {StorybookConfig} from '@storybook/nextjs';
+
+process.env.TAMAGUI_TARGET = 'web';
 
 const config: StorybookConfig = {
   stories: ['./stories/**/*.stories.?(ts|tsx|js|jsx)'],
@@ -36,10 +37,22 @@ const config: StorybookConfig = {
       // nextConfigPath: path.resolve(projectRoot, 'next.config.js'),
     },
   },
-  webpackFinal: async (config, { configType }) => {
-    return config
+  webpackFinal: async (config, {configType}) => {
+    const storybookDefinePlugin = config.plugins.find((plugin) => plugin.definitions);
+
+    config.plugins = config.plugins.map((plugin) => {
+      if (plugin.constructor.name === 'DefinePlugin') {
+        plugin.definitions['process'] = '({"env":{"TAMAGUI_TARGET":"web"}})';
+        plugin.definitions['process.env'] = '({"TAMAGUI_TARGET":"web"})';
+        plugin.definitions['process.env.TAMAGUI_TARGET'] = '("web")';
+      }
+
+      return plugin;
+    });
+
+    return config;
   },
-  env: (config) => ({
+  env: config => ({
     ...config,
     TAMAGUI_TARGET: 'web',
   }),
@@ -47,5 +60,5 @@ const config: StorybookConfig = {
     autodocs: true,
     defaultName: 'Documentation',
   },
-}
-export default config
+};
+export default config;
